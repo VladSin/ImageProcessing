@@ -3,7 +3,7 @@ import math
 from PIL import Image, ImageDraw
 
 operation = int(input('operation:'))
-original = Image.open("images/Bird.jpg")
+original = Image.open("images/lab1/Bird.jpg")
 draw = ImageDraw.Draw(original)
 width = original.size[0]
 height = original.size[1]
