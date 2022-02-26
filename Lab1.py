@@ -3,7 +3,7 @@ import math
 from PIL import Image, ImageDraw
 
 operation = int(input('operation:'))
-original = Image.open("images/lab1/Bird.jpg")
+original = Image.open("images/lab1/Screenshot_3.png")
 draw = ImageDraw.Draw(original)
 width = original.size[0]
 height = original.size[1]
@@ -38,8 +38,8 @@ def mult(param, constant):
     return result
 
 
-def log(param, constant):
-    result = math.log(param + 1) * constant
+def log(param, maxValue):
+    result = math.log(param / maxValue + 1) * 255
     if result > 255:
         return 255
     if result < 0:
@@ -47,14 +47,22 @@ def log(param, constant):
     return result
 
 
-def pow(param, constant, g):
-    result = math.pow(param, g) * constant
+def pow(param, maxValue, g):
+    result = math.pow(param / maxValue, g) * 255
     if result > 255:
         return 255
     if result < 0:
         return 0
     return result
 
+
+def maxV(pix):
+    maxValue = - 100
+    for i in range(width):
+        for j in range(height):
+            if maxValue < pix[i, j][0]:
+                maxValue = pix[i, j][0]
+    return maxValue
 
 if (operation == 1):
     averaging(width, height)
@@ -91,6 +99,7 @@ if (operation == 3):
 
 if (operation == 4):
     averaging(width, height)
+    maxValue = maxV(pix)
     const = float(input('const:'))
     for i in range(width):
         for j in range(height):
@@ -103,6 +112,7 @@ if (operation == 4):
 
 if (operation == 5):
     averaging(width, height)
+    maxValue = maxV(pix)
     const = float(input('const:'))
     gamma = float(input('gamma:'))
     for i in range(width):
@@ -110,9 +120,9 @@ if (operation == 5):
             a = pix[i, j][0]
             b = pix[i, j][1]
             c = pix[i, j][2]
-            draw.point((i, j), (int(pow(a, const, gamma)),
-                                int(pow(b, const, gamma)),
-                                int(pow(c, const, gamma))))
+            draw.point((i, j), (int(pow(a, maxValue, gamma)),
+                                int(pow(b, maxValue, gamma)),
+                                int(pow(c, maxValue, gamma))))
 
-original.save("images/Result.png")
+original.save("images/lab1/Result.png")
 del draw
