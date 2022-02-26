@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 
-original = Image.open("images/lab2/Image.png")
+original = Image.open("images/lab2/Bird.jpg")
 draw = ImageDraw.Draw(original)
 width = original.size[0]
 height = original.size[1]
@@ -17,22 +17,21 @@ def visualization(data, valuesX, valuesY):
 
 def evaluation(widthImage, heightImage):
     areaH = widthImage * heightImage
-    averageH = areaH / 256.0
+    argH = areaH / 256.0
 
     z = 0
-    int_h = 0
+    intH = 0
     left = [0] * 256
     right = [0] * 256
     new = [0] * 256
-
     newList = []
 
     for j in range(255):
         left[j] = z
-        int_h += listY[j]
+        intH += listY[j]
 
-        while int_h > averageH:
-            int_h -= averageH
+        while intH > argH:
+            intH -= argH
             z += 1
 
         right[j] = z
@@ -50,47 +49,43 @@ def linearContrast(param, minValue, maxValue):
     return int(((param - minValue) / (maxValue - minValue)) * (255 - 0) + 0)
 
 
-def bitPlaneSelection():
-    return 4
+def putDataAndSave(datas, path):
+    convertImage = Image.new("L", original.size)
+    convertImage.putdata(datas)
+    convertImage.save(path)
 
 
-# vars for histogram
+# starting values for histogram
 listX = list(range(256))
 listY = [0] * 256
 
-# visualization histogram
+# Visualization histogram
 visualization(convertData, listX, listY)
+putDataAndSave(convertData, "images/lab2/convertImageAfterConversion.png")
 
-# equalization process
-newConvertList = evaluation(width, height)
+# Equalization process and visualization histogram
+newConvertData = evaluation(width, height)
+visualization(newConvertData, listX, listY)
+putDataAndSave(newConvertData, "images/lab2/convertImageAfterEqualization.png")
 
-# visualization histogram
-visualization(newConvertList, listX, listY)
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(newConvertList)
-convertImage.save("images/lab2/convertImageHistogram.png")
-
-# linear contrast
+# Linear contrast
 minValue = min(convertData)
 maxValue = max(convertData)
 
-lstNewLin = []
+listAfterLinearContrast = []
 for i in convertData:
-    lstNewLin.append(linearContrast(i, minValue, maxValue))
+    listAfterLinearContrast.append(linearContrast(i, minValue, maxValue))
+putDataAndSave(listAfterLinearContrast, "images/lab2/convertImageAfterLinearContrast.png")
 
-convertImage = Image.new("L", original.size)
-convertImage.putdata(lstNewLin)
-convertImage.save("images/lab2/convertImageAfterLinearContrast.png")
-
-list1 = []
-list2 = []
-list3 = []
-list4 = []
-list5 = []
-list6 = []
-list7 = []
-list8 = []
+# Selecting bit planes
+bitPlane1 = []
+bitPlane2 = []
+bitPlane3 = []
+bitPlane4 = []
+bitPlane5 = []
+bitPlane6 = []
+bitPlane7 = []
+bitPlane8 = []
 
 for i in convertData:
     temp = []
@@ -100,43 +95,20 @@ for i in convertData:
         else:
             temp.append(255)
         i /= 2
-    list1.append(temp[0])
-    list2.append(temp[1])
-    list3.append(temp[2])
-    list4.append(temp[3])
-    list5.append(temp[4])
-    list6.append(temp[5])
-    list7.append(temp[6])
-    list8.append(temp[7])
+    bitPlane1.append(temp[0])
+    bitPlane2.append(temp[1])
+    bitPlane3.append(temp[2])
+    bitPlane4.append(temp[3])
+    bitPlane5.append(temp[4])
+    bitPlane6.append(temp[5])
+    bitPlane7.append(temp[6])
+    bitPlane8.append(temp[7])
 
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list1)
-convertImage.save("images/lab2/convertImage1.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list2)
-convertImage.save("images/lab2/convertImage2.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list3)
-convertImage.save("images/lab2/convertImage3.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list4)
-convertImage.save("images/lab2/convertImage4.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list5)
-convertImage.save("images/lab2/convertImage5.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list6)
-convertImage.save("images/lab2/convertImage6.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list7)
-convertImage.save("images/lab2/convertImage7.png")
-
-convertImage = Image.new("L", original.size)
-convertImage.putdata(list8)
-convertImage.save("images/lab2/convertImage8.png")
+putDataAndSave(bitPlane1, "images/lab2/convertImage1.png")
+putDataAndSave(bitPlane2, "images/lab2/convertImage2.png")
+putDataAndSave(bitPlane3, "images/lab2/convertImage3.png")
+putDataAndSave(bitPlane4, "images/lab2/convertImage4.png")
+putDataAndSave(bitPlane5, "images/lab2/convertImage5.png")
+putDataAndSave(bitPlane6, "images/lab2/convertImage6.png")
+putDataAndSave(bitPlane7, "images/lab2/convertImage7.png")
+putDataAndSave(bitPlane8, "images/lab2/convertImage8.png")
