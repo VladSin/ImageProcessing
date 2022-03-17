@@ -49,8 +49,8 @@ def linearContrast(param, minValue, maxValue):
     return int(((param - minValue) / (maxValue - minValue)) * (255 - 0) + 0)
 
 
-def putDataAndSave(datas, path):
-    convertImage = Image.new("L", original.size)
+def putDataAndSave(datas, path, size):
+    convertImage = Image.new("L", size)
     convertImage.putdata(datas)
     convertImage.save(path)
 
@@ -61,12 +61,12 @@ listY = [0] * 256
 
 # Visualization histogram
 visualization(convertData, listX, listY)
-putDataAndSave(convertData, "images/lab2/convertImageAfterConversion.png")
+putDataAndSave(convertData, "images/lab2/convertImageAfterConversion.png", original.size)
 
 # Equalization process and visualization histogram
 newConvertData = evaluation(width, height)
 visualization(newConvertData, listX, listY)
-putDataAndSave(newConvertData, "images/lab2/convertImageAfterEqualization.png")
+putDataAndSave(newConvertData, "images/lab2/convertImageAfterEqualization.png", original.size)
 
 # Linear contrast
 minValue = min(convertData)
@@ -75,7 +75,7 @@ maxValue = max(convertData)
 listAfterLinearContrast = []
 for i in convertData:
     listAfterLinearContrast.append(linearContrast(i, minValue, maxValue))
-putDataAndSave(listAfterLinearContrast, "images/lab2/convertImageAfterLinearContrast.png")
+putDataAndSave(listAfterLinearContrast, "images/lab2/convertImageAfterLinearContrast.png", original.size)
 
 # Selecting bit planes
 bitPlane1 = []
@@ -104,11 +104,11 @@ for i in convertData:
     bitPlane7.append(temp[6])
     bitPlane8.append(temp[7])
 
-putDataAndSave(bitPlane1, "images/lab2/convertImage1.png")
-putDataAndSave(bitPlane2, "images/lab2/convertImage2.png")
-putDataAndSave(bitPlane3, "images/lab2/convertImage3.png")
-putDataAndSave(bitPlane4, "images/lab2/convertImage4.png")
-putDataAndSave(bitPlane5, "images/lab2/convertImage5.png")
-putDataAndSave(bitPlane6, "images/lab2/convertImage6.png")
-putDataAndSave(bitPlane7, "images/lab2/convertImage7.png")
-putDataAndSave(bitPlane8, "images/lab2/convertImage8.png")
+putDataAndSave(bitPlane1, "images/lab2/convertImage1.png", original.size)
+putDataAndSave(bitPlane2, "images/lab2/convertImage2.png", original.size)
+putDataAndSave(bitPlane3, "images/lab2/convertImage3.png", original.size)
+putDataAndSave(bitPlane4, "images/lab2/convertImage4.png", original.size)
+putDataAndSave(bitPlane5, "images/lab2/convertImage5.png", original.size)
+putDataAndSave(bitPlane6, "images/lab2/convertImage6.png", original.size)
+putDataAndSave(bitPlane7, "images/lab2/convertImage7.png", original.size)
+putDataAndSave(bitPlane8, "images/lab2/convertImage8.png", original.size)

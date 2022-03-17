@@ -3,7 +3,7 @@ import math
 from PIL import Image, ImageDraw
 
 operation = int(input('operation:'))
-original = Image.open("images/lab1/Screenshot_3.png")
+original = Image.open("images/lab1/Bird.jpg")
 draw = ImageDraw.Draw(original)
 width = original.size[0]
 height = original.size[1]
@@ -124,5 +124,5 @@ if (operation == 5):
                                 int(pow(b, maxValue, gamma)),
                                 int(pow(c, maxValue, gamma))))
 
-original.save("images/lab1/Result.png")
+original.save("images/lab1/img_3.png")
 del draw
