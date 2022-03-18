@@ -63,28 +63,28 @@ def gradientFunction(data, width, height):
 
     for j in range(height):
         for i in range(width):
-            gradX = 0
-            gradY = 0
+            Gm = 0
+            Gn = 0
             if i + 1 == width:
-                gradX = data[j * height + i] - data[j * height + i - 1]
+                Gm = data[j * height + i] - data[j * height + i - 1]
             elif i - 1 < 0:
-                gradX = data[j * height + i + 1] - data[j * height + i]
+                Gm = data[j * height + i + 1] - data[j * height + i]
             else:
-                gradX = data[j * height + i + 1] - data[j * height + i - 1]
+                Gm = data[j * height + i + 1] - data[j * height + i - 1]
 
             if j + 1 == height:
-                gradY = data[j * height + i] - data[(j - 1) * height + i]
+                Gn = data[j * height + i] - data[(j - 1) * height + i]
             elif j - 1 < 0:
-                gradY = data[(j + 1) * height + i] - data[j * height + i]
+                Gn = data[(j + 1) * height + i] - data[j * height + i]
             else:
-                gradY = data[(j + 1) * height + i] - data[(j - 1) * height + i]
+                Gn = data[(j + 1) * height + i] - data[(j - 1) * height + i]
 
-            if abs(gradX) > abs(gradY):
-                sumGrad += gradX
-                sum += data[j * height + i] * gradX
+            if abs(Gm) > abs(Gn):
+                sumGrad += Gm
+                sum += data[j * height + i] * Gm
             else:
-                sumGrad += gradY
-                sum += data[j * height + i] * gradY
+                sumGrad += Gn
+                sum += data[j * height + i] * Gn
 
     border = int(sum / sumGrad)
     print("Border Grad = ", border)
