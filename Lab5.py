@@ -1,7 +1,8 @@
 from PIL import Image
 from math import *
 
-original = Image.open("./img_5.jpg")
+original = Image.open("images/lab5/image6.jpg")
+originalImage = original.convert("L")
 convertData = original.convert("L").getdata()
 
 
@@ -11,7 +12,7 @@ def putDataAndSave(datas, path, size):
     convertImage.save(path)
 
 
-def calculateFilter(mask, data, image, board):
+def calculateFilter1(mask, data, image, board):
     filterData = []
     for j in range(image.size[0]):
         for i in range(image.size[1]):
@@ -30,58 +31,35 @@ def calculateFilter(mask, data, image, board):
     return filterData
 
 
-lst_mask_point = [[1, 1, 1], [1, -8, 1], [1, 1, 1]]
-lineFilterData = calculateFilter(lst_mask_point, convertData, original, int(0.7 * max(convertData)))
-putDataAndSave(lineFilterData, "images/lab5/image_points.jpg", original.size)
+def calculateFilter2(mask, data, board, path):
+    copyData = data.copy()
+    filterData = copyData.load()
+    for i in range(data.size[0]):
+        for j in range(data.size[1]):
+            pixel = 0
+            for mask_i in range(len(mask)):
+                for mask_j in range(len(mask[mask_i])):
+                    try:
+                        pixel -= filterData[i - floor(len(mask) / 2) + mask_i, j - floor(
+                            len(mask[mask_i]) / 2) + mask_j] * mask[mask_i][mask_j]
+                    except IndexError:
+                        pixel -= filterData[i, j] * mask[mask_i][mask_j]
+            if abs(pixel) > board:
+                filterData[i, j] = 255
+            else:
+                filterData[i, j] = 0
+    return copyData.save(path)
 
+# Для обнаружения точек
+maskPoint = [[1, 1, 1], [1, -8, 1], [1, 1, 1]]
+lineFilterData = calculateFilter1(maskPoint, convertData, original, int(0.7 * max(convertData)))
+putDataAndSave(lineFilterData, "images/lab5/ResultPointFilterImage.jpg", original.size)
 
-lst_mask_line_horz = [[1, 0, -1], [1, 0, -1], [1, 0, -1]]
-lst_line_horz_filt = []
+# Для обнаружения линий
+maskLineHorz = [[1, 0, -1], [1, 0, -1], [1, 0, -1]]
+calculateFilter2(maskLineHorz, originalImage, 400, "images/lab5/ResultLineFilterImage.jpg")
 
-lst_mask_move = [[0, -1, 0], [0, 1, 0], [0, 0, 0]]
-lst_line_move = []
+# Для обнаружения краев
+maskKirsh = [[3, 3, 3], [3, 0, 3], [-5, -5, -5]]
+calculateFilter2(maskKirsh, originalImage, 600, "images/lab5/imageKirshFilter.jpg")
 
-im = Image.open("./image3.jpg")
-px = im.convert("L")
-px_1 = px.copy()
-px1 = px_1.load()
-for i in range(px.size[0]):
-    for j in range(px.size[1]):
-        pixel = 0
-        for mask_i in range(len(lst_mask_line_horz)):
-            for mask_j in range(len(lst_mask_line_horz[mask_i])):
-                try:
-                    pixel -= px1[i - floor(len(lst_mask_line_horz) / 2) + mask_i, j - floor(
-                        len(lst_mask_line_horz[mask_i]) / 2) + mask_j] * lst_mask_line_horz[mask_i][mask_j]
-                except IndexError:
-                    pixel -= px1[i, j] * lst_mask_line_horz[mask_i][mask_j]
-        if abs(pixel) > 400:
-            px1[i, j] = (255)
-        else:
-            px1[i, j] = (0)
-px_1.save("./image_lines_horz.jpg")
-
-original = Image.open("./image6.jpg")
-px = original.convert("L")
-px_1 = px.copy()
-px1 = px_1.load()
-
-lst_mask_kirsh = [[3, 3, 3], [3, 0, 3], [-5, -5, -5]]
-lst_line_horz_filt = []
-
-for i in range(px.size[0]):
-    for j in range(px.size[1]):
-        pixel = 0
-        for mask_i in range(len(lst_mask_kirsh)):
-            for mask_j in range(len(lst_mask_kirsh[mask_i])):
-                try:
-                    pixel -= px1[i - floor(len(lst_mask_kirsh) / 2) + mask_i, j - floor(
-                        len(lst_mask_kirsh[mask_i]) / 2) + mask_j] * lst_mask_kirsh[mask_i][mask_j]
-                except IndexError:
-                    pixel -= px1[i, j] * lst_mask_kirsh[mask_i][mask_j]
-        if abs(pixel) > 600:
-            px1[i, j] = (255)
-        else:
-            px1[i, j] = (0)
-
-px_1.save("./image_kirsh.jpg")
