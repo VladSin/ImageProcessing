@@ -2,7 +2,7 @@ from math import *
 import matplotlib.pyplot as plt
 from PIL import Image
 
-original = Image.open("images/lab3/Bird.jpg")
+original = Image.open("images/lab3/finger2.png")
 widthImage = original.size[0]
 heightImage = original.size[1]
 convertData = original.convert("L").getdata()
@@ -129,7 +129,7 @@ def otsuFunction(data):
 
 # calculate resultHistogramImage
 visualization(convertData, listX, listY)
-borderHistogram = histogramFunction(convertData, 120, 5)
+borderHistogram = histogramFunction(convertData, 150, 5)
 calculatedData = calculate(convertData, borderHistogram)
 putDataAndSave(calculatedData, "images/lab3/resultHistogramImage.jpg", original.size)
 

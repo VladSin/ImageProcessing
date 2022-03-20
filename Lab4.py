@@ -1,7 +1,7 @@
 from math import *
 from PIL import Image
 
-original = Image.open("images/lab4/Bird.jpg")
+original = Image.open("images/lab4/house.png")
 convertData = original.convert("L").getdata()
 
 
